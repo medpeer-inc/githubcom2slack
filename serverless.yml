@@ -1,0 +1,30 @@
+service: githubwebhook2slack
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  timeout: 30
+  stage: production
+  region: ap-northeast-1
+  environment:
+    GITHUB_WEBHOOK_SECRET_ENCRYPTED: ${file(./secrets.yml):GITHUB_WEBHOOK_SECRET_ENCRYPTED}
+    SLACK_INCONMING_WEBHOOK_URL_ENCRYPTED: ${file(./secrets.yml):SLACK_INCONMING_WEBHOOK_URL_ENCRYPTED}
+    SLACK_USERNAME: deployer
+    SLACK_ICON: ':rocket:'
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - kms:Encrypt
+        - kms:Decrypt
+      Resource: ${file(./secrets.yml):AWS_KMS_KEY_ARN}
+  logRetentionInDays: 7
+  versionFunctions: false
+
+functions:
+  githubWebhook2Slack:
+    handler: handler.githubWebhookListener
+    events:
+    - http:
+        path: webhook
+        method: post
+        cors: true

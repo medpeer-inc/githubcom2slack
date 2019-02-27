@@ -1,0 +1,10 @@
+{
+  "name": "githubcom2slack",
+  "version": "1.0.0",
+  "main": "handler.js",
+  "author": "kenzo.tanaka <kenzo.tanaka@medpeer.co.jp>",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.407.0"
+  }
+}
